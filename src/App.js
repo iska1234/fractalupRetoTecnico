@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Home from "scenes/Home/Home";
+import Vista1 from "scenes/Vista1/Vista1";
+import Vista2 from "scenes/Vista2/Vista2";
+import Layout from "scenes/layout/Layout";
+import { themeSettings } from "theme";
+
 
 function App() {
+
+  const mode = useSelector((state) => state.global.mode);
+  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <CssBaseline/>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route path="/" element={<Navigate to="/home" replace /> } />
+                <Route path="/home" element={<Home /> } />
+                <Route path="/vista1" element={<Vista1 /> } />
+                <Route path="/vista2" element={<Vista2 /> } />
+              </Route>
+            </Routes>
+        </ThemeProvider>
+      </BrowserRouter>
     </div>
   );
 }
